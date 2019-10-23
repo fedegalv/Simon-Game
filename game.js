@@ -31,19 +31,31 @@ function checkAnswer(currentLevel) {
     // console.log("fail");
     playSound("wrong");
     $("body").addClass("game-over");
-    setTimeout(function(){
+    setTimeout(function() {
       $("body").removeClass("game-over");
-    },200);
+    }, 200);
     $("#level-title").text("Game Over, Press ENTER to Restart");
     startOver();
   }
 }
 
-function startOver()
-{
-  pressedBefore= false;
-  levelCount= 0;
-  gamePattern= [];
+// Play the buttons following the order in the array
+function playPattern() {
+  var interval = 1000;
+  gamePattern.forEach(function (el, index) {
+    setTimeout(function () {
+      console.log(el);
+      animatePress(el);
+      playSound(el);
+    }, index * interval);
+  });
+  console.log('Loop finished.');
+}
+// Reset the game variables
+function startOver() {
+  pressedBefore = false;
+  levelCount = 0;
+  gamePattern = [];
 }
 
 function animatePress(currentColor) {
@@ -53,7 +65,6 @@ function animatePress(currentColor) {
     $(colorId).removeClass("pressed");
   }, 100);
 }
-
 function playSound(name) {
   var audioName = "sounds/" + name + ".mp3";
   var audio = new Audio(audioName);
@@ -65,8 +76,7 @@ function changeTitle(levelCount) {
   $("#level-title").text(title);
 }
 
-//
-
+// Add keypress event 
 $("body").keypress(function(event) {
   var keyPressed = event.key;
   if (keyPressed == "Enter" && pressedBefore == false) {
@@ -77,7 +87,7 @@ $("body").keypress(function(event) {
   }
 });
 
-
+// Add on.click event to buttons,
 $(".btn").on("click", function(event) {
   // alert(event.target.id);
   var userChosenColor = event.target.id;
